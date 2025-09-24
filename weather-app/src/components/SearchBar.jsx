@@ -1,8 +1,15 @@
 import { Component } from "react";
 import icon_search from "../assets/icon-search.svg";
+import GetWeatherLocation from "../api/apiWeather"; // ✅
+
 export default class SearchBar extends Component {
   constructor(props) {
     super(props);
+  }
+  componentDidMount() {
+    GetWeatherLocation("Belgrade").then((t) => {
+      console.log(t);
+    });
   }
 
   render() {
@@ -13,12 +20,12 @@ export default class SearchBar extends Component {
             <div className="img">
               <img src={icon_search} alt="ico" />
             </div>
-            <div className="bar ">
+            <div className="bar w-full">
               <input
                 type="text"
                 name="search"
                 id="search"
-                className="p-0 m-0 border-none outline-none indent-2.5"
+                className="p-0 m-0 border-none outline-none indent-5 w-full"
                 c
               />
             </div>
