@@ -6,11 +6,6 @@ export default class SearchBar extends Component {
   constructor(props) {
     super(props);
   }
-  componentDidMount() {
-    GetWeatherLocation("Belgrade").then((t) => {
-      console.log(t);
-    });
-  }
 
   render() {
     return (
