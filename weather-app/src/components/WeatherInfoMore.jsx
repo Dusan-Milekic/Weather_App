@@ -26,17 +26,25 @@ class WeatherInfoMore extends Component {
     switch (metric) {
       case "humidity":
         return this.renderCard("Humidity", humidity, "%", 0);
+
       case "wind":
-        return this.renderCard("Wind", wind, " km/h", 0);
+        return this.renderCard("Humidity", humidity, "%", 0);
+
       case "feelsLike":
         return this.renderCard("Feels like", feelsLike, "°C", 1);
+
       case "precipitation":
         return this.renderCard("Precipitation", precipitation, " mm", 1);
+
       default:
         // Ako metric nije prosleđen -> prikaži sve četiri
+
         return (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <h1>Prosledite parametre</h1>
+            {this.renderCard("Humidity", humidity, "%", 0)}
+            {this.renderCard("Wind", wind, " km/h", 0)}
+            {this.renderCard("Feels like", feelsLike, "°C", 1)}
+            {this.renderCard("Precipitation", precipitation, " mm", 1)}
           </div>
         );
     }

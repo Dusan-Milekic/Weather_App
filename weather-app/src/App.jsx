@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { fetchWeather } from "./app/weatherSlice";
 import WeatherInfo from "./components/WeatherInfo";
 import WeatherInfoMore from "./components/WeatherInfoMore";
+import DailyForecast from "./components/DailyForecast";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -15,11 +16,15 @@ export default function App() {
 
   return (
     <>
-      <WeatherInfo />
-      <WeatherInfoMore metric="humidity"></WeatherInfoMore>
-      <WeatherInfoMore metric="wind"></WeatherInfoMore>
-      <WeatherInfoMore metric="feelsLike"></WeatherInfoMore>
-      <WeatherInfoMore metric="precipitation"></WeatherInfoMore>
+      <WeatherInfo></WeatherInfo>
+      <WeatherInfoMore></WeatherInfoMore>
+      <DailyForecast index={0}></DailyForecast>
+      <DailyForecast index={1}></DailyForecast>
+      <DailyForecast index={2}></DailyForecast>
+      <DailyForecast index={3}></DailyForecast>
+      <DailyForecast index={4}></DailyForecast>
+      <DailyForecast index={5}></DailyForecast>
+      <DailyForecast index={6}></DailyForecast>
     </>
   );
 }

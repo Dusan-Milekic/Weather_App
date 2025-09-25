@@ -23,19 +23,16 @@ export async function getTemperature(location) {
     latitude: [latitude],
     longitude: [longitude],
     timezone: "auto",
-    current: ["temperature_2m"], // tražimo baš ono što nam treba
-    forecast_days: 1,
+    current: ["temperature_2m"],
+    forecast_days: 7,
+    temperature_unit: "celsius",
   };
 
   const [resp] = await fetchWeatherApi(url, params);
   const curr = resp?.current?.();
   const temp = curr ? curr.variables(0).value() : null;
 
-  return {
-    latitude,
-    longitude,
-    temperature: temp, // number | null
-  };
+  return { latitude, longitude, temperature: temp };
 }
 
 // --- pun helper sa svim poljima koja očekuješ u Redux-u ---
@@ -49,7 +46,8 @@ export default async function GetWeatherLocation(arg_location) {
     latitude: [latitude],
     longitude: [longitude],
     timezone: "auto",
-    // >>> DODALI SMO humidity i precipitation u CURRENT! <<<
+
+    // CURRENT — redosled indeksa MORA da se poklapa sa variables(i) ispod
     current: [
       "temperature_2m", // idx 0
       "is_day", // idx 1
@@ -57,16 +55,35 @@ export default async function GetWeatherLocation(arg_location) {
       "relative_humidity_2m", // idx 3
       "precipitation", // idx 4
     ],
-    hourly: ["temperature_2m"], // koristimo kao fallback za current
-    daily: ["weather_code", "temperature_2m_max", "temperature_2m_min"],
+
+    // HOURLY — koristimo za fallback temperature
+    hourly: ["temperature_2m"],
+
+    // DAILY — DODATO: snowfall_sum, showers_sum, rain_sum (redosled -> indices)
+    daily: [
+      "weather_code", // 0
+      "temperature_2m_max", // 1
+      "temperature_2m_min", // 2
+      "snowfall_sum", // 3 (cm)
+      "showers_sum", // 4 (mm)
+      "rain_sum", // 5 (mm)
+    ],
+
+    // MINUTELY_15 — ostaje isto
     minutely_15: [
       "wind_speed_10m",
       "temperature_2m",
       "is_day",
       "wind_gusts_10m",
     ],
+
     past_days: 0,
-    forecast_days: 1,
+    forecast_days: 7,
+
+    // Jedinice da sve dobijemo "lepo"
+    windspeed_unit: "kmh",
+    precipitation_unit: "mm",
+    temperature_unit: "celsius",
   };
 
   const [response] = await fetchWeatherApi(url, params);
@@ -79,7 +96,6 @@ export default async function GetWeatherLocation(arg_location) {
     ? new Date((Number(current.time()) + offset) * 1000)
     : null;
 
-  // mapiranje po REDOSLEDU iz params.current
   let currentBlock = null;
   if (hasCurrent) {
     currentBlock = {
@@ -87,9 +103,9 @@ export default async function GetWeatherLocation(arg_location) {
       time_iso: currentTime.toISOString(),
       temperature_2m: current.variables(0).value(),
       is_day: current.variables(1).value(),
-      wind_speed_10m: current.variables(2).value(),
-      relative_humidity_2m: current.variables(3).value(),
-      precipitation: current.variables(4).value(),
+      wind_speed_10m: current.variables(2).value(), // km/h
+      relative_humidity_2m: current.variables(3).value(), // %
+      precipitation: current.variables(4).value(), // mm
     };
   }
 
@@ -109,7 +125,6 @@ export default async function GetWeatherLocation(arg_location) {
       : [];
   const hourlyTemp = hourly?.variables?.(0)?.valuesArray?.() ?? [];
 
-  // Ako current fali, uzmi najbliži sat iz hourly kao “pseudo-current”
   if (
     !currentBlock &&
     hourlyTime.length > 0 &&
@@ -156,6 +171,13 @@ export default async function GetWeatherLocation(arg_location) {
         )
       : [];
 
+  const dailyWeatherCode = daily?.variables?.(0)?.valuesArray?.() ?? [];
+  const dailyTempMax = daily?.variables?.(1)?.valuesArray?.() ?? [];
+  const dailyTempMin = daily?.variables?.(2)?.valuesArray?.() ?? [];
+  const dailySnowfallSum = daily?.variables?.(3)?.valuesArray?.() ?? []; // cm
+  const dailyShowersSum = daily?.variables?.(4)?.valuesArray?.() ?? []; // mm
+  const dailyRainSum = daily?.variables?.(5)?.valuesArray?.() ?? []; // mm
+
   // --- MINUTELY_15 ---
   const m15 = response.minutely15?.();
   const mStart = Number(m15?.time?.() ?? 0);
@@ -179,17 +201,24 @@ export default async function GetWeatherLocation(arg_location) {
       country_code: country_code ?? null,
       timezone_offset_seconds: offset,
     },
+
     current: currentBlock, // uvek postoji (pravi ili fallback)
+
     hourly: {
       time: hourlyTime,
       temperature_2m: hourlyTemp,
     },
+
     daily: {
       time: dailyTime,
-      weather_code: daily?.variables?.(0)?.valuesArray?.() ?? [],
-      temperature_2m_max: daily?.variables?.(1)?.valuesArray?.() ?? [],
-      temperature_2m_min: daily?.variables?.(2)?.valuesArray?.() ?? [],
+      weather_code: dailyWeatherCode,
+      temperature_2m_max: dailyTempMax,
+      temperature_2m_min: dailyTempMin,
+      snowfall_sum: dailySnowfallSum, // cm
+      showers_sum: dailyShowersSum, // mm
+      rain_sum: dailyRainSum, // mm
     },
+
     minutely15: {
       time: m15Time,
       wind_speed_10m: m15?.variables?.(0)?.valuesArray?.() ?? [],
@@ -197,6 +226,7 @@ export default async function GetWeatherLocation(arg_location) {
       is_day: m15?.variables?.(2)?.valuesArray?.() ?? [],
       wind_gusts_10m: m15?.variables?.(3)?.valuesArray?.() ?? [],
     },
+
     time: hourlyTime, // zgodno za grafove
   };
 }
