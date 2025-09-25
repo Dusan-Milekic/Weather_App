@@ -11,10 +11,10 @@ function HourCard({ ts, temp }) {
   const icon = h >= 6 && h < 20 ? icon_sunny : icon_overcast;
 
   return (
-    <div className="bg-[#302F4A] rounded-lg flex items-center justify-between py-3 px-4 mt-2">
+    <div className="bg-[#302F4A] rounded-lg flex items-center  justify-between py-3 px-4 mt-2">
       <div className="flex items-center gap-2">
         <img src={icon} alt="hour" className="h-10 w-10" />
-        <p className="text-xs opacity-80">{hour}</p>
+        <p className="text-xs  font-bold">{hour}</p>
       </div>
       <p className="text-base font-semibold">
         {temp == null || isNaN(temp) ? "—" : `${Math.round(temp)}°`}
@@ -32,7 +32,7 @@ class HourlyForecast extends Component {
     }
 
     return (
-      <div className="flex flex-col">
+      <div className="flex flex-col overflow-auto h-[580px]">
         {hours.map((hour, index) => (
           <HourCard key={index} ts={hour.time} temp={hour.temperature} />
         ))}

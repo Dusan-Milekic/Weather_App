@@ -12,25 +12,28 @@ class WeatherInfo extends Component {
       this.props;
 
     return (
-      <div className="bg-gradient-to-tr from-[#4658D9] to-[#2B1B9C] bg-[url('/bg-today-large.svg')] bg-no-repeat bg-cover flex items-center rounded-2xl justify-between px-5 py-10">
-        <div className="location">
-          <h2 className="text-2xl font-semibold">
+      <div
+        className="bg-gradient-to-tr from-[#4658D9] to-[#2B1B9C] bg-[url('/bg-today-large.svg')] bg-no-repeat bg-cover flex flex-col items-center rounded-2xl justify-between px-5 py-10
+      sm:flex-row"
+      >
+        <div className="location text-center sm:text-left">
+          <h2 className="text-2xl font-semibold sm:text-3xl">
             {city}, {country}
           </h2>
-          <p className="opacity-90">
+          <p className="opacity-90 sm:text-xl">
             {dayName}, {month} {day}, {year}
           </p>
         </div>
 
-        <div className="temperature flex items-center">
-          <div className="image">
+        <div className="temperature flex  items-center">
+          <div className="image max-w-44">
             {is_day ? (
               <img src={ico_suny} alt="Sunny" />
             ) : (
               <img src={ico_night} alt="Night" />
             )}
           </div>
-          <h1 className="text-4xl leading-none font-bold text-center ">
+          <h1 className="text-4xl leading-none font-bold text-center sm:text-5xl">
             {Math.round(temperature ?? 0)}
             {"  "}
             {store.getState().metricTemperature.value}

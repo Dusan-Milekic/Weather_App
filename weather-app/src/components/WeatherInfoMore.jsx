@@ -44,7 +44,7 @@ class WeatherInfoMore extends Component {
 
       default:
         return (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {this.renderCard("Humidity", humidity, "%")}
             {this.renderCard(
               "Wind",
