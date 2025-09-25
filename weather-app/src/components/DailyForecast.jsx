@@ -83,8 +83,8 @@ const mapStateToProps = (state, ownProps) => {
   const minTemp = pick(d.temperature_2m_min);
   const maxTemp = pick(d.temperature_2m_max);
   const weatherCode = pick(d.weather_code);
-  const fahrenMin = (minTemp * 9) / 5 + 32;
-  const fahrenMax = (maxTemp * 9) / 5 + 32;
+  const fahrenMin = Math.round((minTemp * 9) / 5 + 32);
+  const fahrenMax = Math.round((maxTemp * 9) / 5 + 32);
   return {
     dayName,
     minTemp:

@@ -67,11 +67,12 @@ const mapStateToProps = (state) => {
   const cur = state.weather?.current ?? {};
 
   // ispravljena putanja: state.weather.current.apparent_temperature
-  const celsius = store.getState().weather.current.temperature_2m ?? null;
-  const fahren = celsius != null ? (celsius * 9) / 5 + 32 : null;
+  const celsius =
+    Math.round(store.getState().weather.current.temperature_2m) ?? null;
+  const fahren = celsius != null ? Math.round((celsius * 9) / 5 + 32) : null;
 
-  const speedKmh = cur?.wind_speed_10m ?? null;
-  const speedMph = speedKmh != null ? speedKmh * 0.621371192 : null;
+  const speedKmh = Math.round(cur?.wind_speed_10m) ?? null;
+  const speedMph = speedKmh != null ? Math.round(speedKmh * 0.621371192) : null;
 
   console.log(state.metricTemperature?.value);
 

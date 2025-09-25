@@ -10,13 +10,15 @@ import HourlyForecast from "./components/HourlyForecast";
 import SettingsDay from "./components/SettingsDay";
 import Settings from "./components/Settings";
 import icon_logo from "./assets/logo.svg";
+
+import store from "./app/store";
 export default function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchWeather("Belgrade")); // ← MORA da postoji
   }, [dispatch]);
-
+  console.log("DAN: ", store.getState().dayName.value);
   return (
     <>
       <header className="flex justify-between py-7 px-5">
@@ -50,7 +52,7 @@ export default function App() {
             <SettingsDay></SettingsDay>
           </header>
           <div className="body">
-            <HourlyForecast></HourlyForecast>
+            <HourlyForecast />
           </div>
         </div>
       </main>
