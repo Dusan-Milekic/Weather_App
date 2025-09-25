@@ -35,14 +35,14 @@ function iconFromWeatherCode(code, isDay = 1) {
 
 function RenderForecast(icon, dayName, minTemp, maxTemp) {
   return (
-    <div className="flex flex-col max-w-40 px-8">
+    <div className="bg-[#302F4A] rounded-lg flex flex-col  py-3">
       <div className="box flex-col">
-        <h2 className="text-center">{dayName ?? ""}</h2>
+        <h2 className="text-center text-lg">{dayName ?? ""}</h2>
         <img src={icon} alt="forecast icon" />
       </div>
       <div className="flex justify-between">
-        <p>{formatTemp(minTemp)}</p>
-        <p>{formatTemp(maxTemp)}</p>
+        <p className="ml-5 text-lg">{formatTemp(minTemp)}</p>
+        <p className="mr-5 text-lg">{formatTemp(maxTemp)}</p>
       </div>
     </div>
   );

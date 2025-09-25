@@ -12,7 +12,7 @@ class WeatherInfoMore extends Component {
     const display =
       value == null ? "—" : `${formatNumber(value, digits)}${unit}`;
     return (
-      <div className="bg-[#302F4A] rounded-lg p-4 flex flex-col gap-1 min-w-44">
+      <div className="bg-[#302F4A] rounded-lg p-4 flex flex-col gap-1 ">
         <h2 className="text-sm opacity-80">{label}</h2>
         <p className="text-2xl font-semibold">{display}</p>
       </div>
@@ -40,7 +40,7 @@ class WeatherInfoMore extends Component {
         // Ako metric nije prosleđen -> prikaži sve četiri
 
         return (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             {this.renderCard("Humidity", humidity, "%", 0)}
             {this.renderCard("Wind", wind, " km/h", 0)}
             {this.renderCard("Feels like", feelsLike, "°C", 1)}

@@ -12,7 +12,7 @@ class WeatherInfo extends Component {
       this.props;
 
     return (
-      <div className="bg-gradient-to-tr from-[#4658D9] to-[#2B1B9C] bg-[url('/bg-today-large.svg')] bg-no-repeat bg-cover flex items-center justify-between px-5 py-10">
+      <div className="bg-gradient-to-tr from-[#4658D9] to-[#2B1B9C] bg-[url('/bg-today-large.svg')] bg-no-repeat bg-cover flex items-center rounded-2xl justify-between px-5 py-10">
         <div className="location">
           <h2 className="text-2xl font-semibold">
             {city}, {country}
@@ -22,15 +22,15 @@ class WeatherInfo extends Component {
           </p>
         </div>
 
-        <div className="temperature flex items-center gap-4">
-          <div className="image w-30 shrink-0">
+        <div className="temperature flex items-center">
+          <div className="image">
             {is_day ? (
               <img src={ico_suny} alt="Sunny" />
             ) : (
               <img src={ico_night} alt="Night" />
             )}
           </div>
-          <h1 className="text-6xl leading-none font-bold">
+          <h1 className="text-4xl leading-none font-bold text-center ">
             {Math.round(temperature ?? 0)}°C
           </h1>
         </div>

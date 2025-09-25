@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 @import "tailwindcss";
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -18,8 +20,15 @@ body {
   margin: 0;
   background-color: #02012c;
   min-height: 100vh;
+  padding: 0 10px;
+  font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
 }
 
 * {
   box-sizing: border-box;
+}
+#h1 {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-optical-sizing: auto;
 }
