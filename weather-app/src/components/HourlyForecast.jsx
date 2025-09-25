@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import icon_overcast from "../assets/icon-overcast.webp";
 import icon_sunny from "../assets/icon-sunny.webp";
+// ❌ import store from "../app/store"; // nije potrebno u mapStateToProps
 
 const isArrayLike = (arr) =>
   Array.isArray(arr) || (arr && ArrayBuffer.isView(arr));
@@ -17,22 +18,19 @@ const formatTemp = (v) =>
   v == null || Number.isNaN(Number(v)) ? "—" : `${Math.round(Number(v))}°`;
 
 function HourCard({ date, temp }) {
-  // jednostavna logika za dan/noć po satu
   const h = date ? date.getHours() : 12;
   const isDay = h >= 6 && h < 20;
   const icon = isDay ? icon_sunny : icon_overcast;
 
   return (
-    <div className="bg-[#302F4A] rounded-lg flex items-center justify-around  py-3 mt-2">
-      <div className="left flex items-center">
+    <div className="bg-[#302F4A] rounded-lg flex items-center justify-around py-3 mt-2">
+      <div className="left flex items-center gap-2">
         <img src={icon} alt="hour" className="h-10 w-10" />
         <p className="text-xs opacity-80">{formatHour(date)}</p>
       </div>
       <div className="flex">
-        <p className="text-base font-semibold self-end ">{formatTemp(temp)}</p>
+        <p className="text-base font-semibold self-end">{formatTemp(temp)}</p>
       </div>
-
-      {/* alternativa: <p className="text-base font-semibold ml-auto">{formatTemp(temp)}</p> */}
     </div>
   );
 }
@@ -61,14 +59,14 @@ const mapStateToProps = (state, ownProps) => {
   const daily = state.weather?.daily ?? {};
   const hourly = state.weather?.hourly ?? {};
 
-  // koji dan (0 = danas). podrži i 'i' / tipfeler 'indes'
+  // dan (0 = danas). podrži i alternativna imena propova
   const dayIndexRaw =
     ownProps.dayIndex ?? ownProps.index ?? ownProps.i ?? ownProps.indes ?? 0;
   const dayIndex = Number.isFinite(Number(dayIndexRaw))
     ? Number(dayIndexRaw)
     : 0;
 
-  // uzmi ciljnu "date" iz daily.time[dayIndex]
+  // ciljna "date" iz daily.time[dayIndex]
   const dayVal =
     isArrayLike(daily.time) && daily.time.length > dayIndex
       ? daily.time[dayIndex]
@@ -91,9 +89,17 @@ const mapStateToProps = (state, ownProps) => {
 
   // vremenske serije
   const hTimes = isArrayLike(hourly.time) ? hourly.time : [];
-  const hTemps = isArrayLike(hourly.temperature_2m)
+  const hTempsRaw = isArrayLike(hourly.temperature_2m)
     ? hourly.temperature_2m
     : [];
+
+  // prilagodi temperaturu prema metrikama iz state-a (bez store.getState())
+  const useCelsius = state.metricTemperature?.value === "°C";
+  const hTemps = useCelsius
+    ? hTempsRaw
+    : hTempsRaw.map((t) =>
+        t == null || Number.isNaN(Number(t)) ? t : (Number(t) * 9) / 5 + 32
+      );
 
   // izdvoji sve sate koji pripadaju tom danu
   const hours = [];
@@ -106,7 +112,7 @@ const mapStateToProps = (state, ownProps) => {
     }
   }
 
-  // opcionalno: sort po vremenu (ako već nisu sortirani)
+  // osiguraj poredak po vremenu (ako već nije)
   hours.sort((a, b) => (a.time?.getTime?.() ?? 0) - (b.time?.getTime?.() ?? 0));
 
   return { hours };

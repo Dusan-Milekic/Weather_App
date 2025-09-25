@@ -1,7 +1,7 @@
 // src/components/DailyForecast.jsx
 import { Component } from "react";
 import { connect } from "react-redux";
-
+import store from "../app/store";
 import icon_drizzle from "../assets/icon-drizzle.webp";
 import icon_fog from "../assets/icon-fog.webp";
 import icon_overcast from "../assets/icon-overcast.webp";
@@ -83,11 +83,14 @@ const mapStateToProps = (state, ownProps) => {
   const minTemp = pick(d.temperature_2m_min);
   const maxTemp = pick(d.temperature_2m_max);
   const weatherCode = pick(d.weather_code);
-
+  const fahrenMin = (minTemp * 9) / 5 + 32;
+  const fahrenMax = (maxTemp * 9) / 5 + 32;
   return {
     dayName,
-    minTemp,
-    maxTemp,
+    minTemp:
+      store.getState().metricTemperature.value === "°C" ? minTemp : fahrenMin,
+    maxTemp:
+      store.getState().metricTemperature.value === "°C" ? maxTemp : fahrenMax,
     weatherCode,
     is_day: state.weather?.current?.is_day ?? 1,
   };
