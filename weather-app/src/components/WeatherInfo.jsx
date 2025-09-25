@@ -2,7 +2,7 @@ import { Component } from "react";
 import { connect } from "react-redux";
 import ico_suny from "../assets/icon-sunny.webp";
 import ico_night from "../assets/icon-overcast.webp";
-
+import store from "../app/store";
 class WeatherInfo extends Component {
   constructor(props) {
     super(props);
@@ -31,7 +31,9 @@ class WeatherInfo extends Component {
             )}
           </div>
           <h1 className="text-4xl leading-none font-bold text-center ">
-            {Math.round(temperature ?? 0)}°C
+            {Math.round(temperature ?? 0)}
+            {"  "}
+            {store.getState().metricTemperature.value}
           </h1>
         </div>
       </div>
@@ -40,17 +42,22 @@ class WeatherInfo extends Component {
 }
 
 // direktno mapStateToProps bez selektora
-const mapStateToProps = (state) => ({
-  city: state.weather.city,
-  country: state.weather.country,
-  temperature: state.weather.temperature,
-  is_day: state.weather.is_day,
-  day: state.weather.day,
-  month: state.weather.month,
-  year: state.weather.year,
-  dayName: state.weather.dayName,
-  status: state.weather.status,
-  error: state.weather.error,
-});
+const mapStateToProps = (state) => {
+  const celisus = store.getState().weather.temperature;
+  const fahren = (celisus * 9) / 5 + 32;
+  return {
+    city: state.weather.city,
+    country: state.weather.country,
+    temperature:
+      store.getState().metricTemperature.value == "°C" ? celisus : fahren,
+    is_day: state.weather.is_day,
+    day: state.weather.day,
+    month: state.weather.month,
+    year: state.weather.year,
+    dayName: state.weather.dayName,
+    status: state.weather.status,
+    error: state.weather.error,
+  };
+};
 
 export default connect(mapStateToProps)(WeatherInfo);

@@ -1,7 +1,9 @@
 import { Component, createRef } from "react";
 import icon_units from "../assets/icon-units.svg";
 import icon_dropdown from "../assets/icon-dropdown.svg";
-
+import store from "../app/store";
+import { changeCelsius, changeFahren } from "../app/metrcisSlice";
+import { changeKM, changeMPH } from "../app/speedSlice";
 export default class Settings extends Component {
   constructor(props) {
     super(props);
@@ -34,16 +36,26 @@ export default class Settings extends Component {
     this.references.p2.current?.classList.remove(...cls);
 
     // set temperature
-    if (this.state.temperature === "C")
+    if (this.state.temperature === "C") {
+      store.dispatch(changeCelsius());
       this.references.t1.current?.classList.add(...cls);
-    if (this.state.temperature === "F")
+    }
+
+    if (this.state.temperature === "F") {
+      store.dispatch(changeFahren());
       this.references.t2.current?.classList.add(...cls);
+    }
 
     // set wind
-    if (this.state.windSpeed === "km/h")
+    if (this.state.windSpeed === "km/h") {
+      store.dispatch(changeKM());
       this.references.s1.current?.classList.add(...cls);
-    if (this.state.windSpeed === "mph")
+    }
+
+    if (this.state.windSpeed === "mph") {
+      store.dispatch(changeMPH());
       this.references.s2.current?.classList.add(...cls);
+    }
 
     // set precipitation
     if (this.state.precipitation === "mm")
