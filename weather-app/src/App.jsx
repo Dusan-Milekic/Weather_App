@@ -1,13 +1,25 @@
 import "./App.css";
-import Settings from "./components/Settings";
-import SearchBar from "./components/SearchBar";
+// App.jsx
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchWeather } from "./app/weatherSlice";
 import WeatherInfo from "./components/WeatherInfo";
-function App() {
+import WeatherInfoMore from "./components/WeatherInfoMore";
+
+export default function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchWeather("Belgrade")); // ← MORA da postoji
+  }, [dispatch]);
+
   return (
     <>
-      <WeatherInfo></WeatherInfo>
+      <WeatherInfo />
+      <WeatherInfoMore metric="humidity"></WeatherInfoMore>
+      <WeatherInfoMore metric="wind"></WeatherInfoMore>
+      <WeatherInfoMore metric="feelsLike"></WeatherInfoMore>
+      <WeatherInfoMore metric="precipitation"></WeatherInfoMore>
     </>
   );
 }
-
-export default App;
