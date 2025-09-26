@@ -4,6 +4,7 @@ import icon_dropdown from "../assets/icon-dropdown.svg";
 import store from "../app/store";
 import { changeCelsius, changeFahren } from "../app/metrcisSlice";
 import { changeKM, changeMPH } from "../app/speedSlice";
+import { changeIN, changeMM } from "../app/preceptionSlice";
 export default class Settings extends Component {
   constructor(props) {
     super(props);
@@ -58,10 +59,15 @@ export default class Settings extends Component {
     }
 
     // set precipitation
-    if (this.state.precipitation === "mm")
+    if (this.state.precipitation === "mm") {
+      store.dispatch(changeMM());
       this.references.p1.current?.classList.add(...cls);
-    if (this.state.precipitation === "in")
+    }
+
+    if (this.state.precipitation === "in") {
+      store.dispatch(changeIN());
       this.references.p2.current?.classList.add(...cls);
+    }
   };
 
   loadMenu = () => {
@@ -81,7 +87,7 @@ export default class Settings extends Component {
   render() {
     return (
       <>
-        <div className="relative">
+        <div className="relative z-50 ">
           <div
             className="box flex items-center justify-center gap-1 bg-[#262540] w-23 h-10  rounded-lg cursor-pointer "
             onClick={() => this.setState({ menu: !this.state.menu })}
@@ -92,10 +98,10 @@ export default class Settings extends Component {
           </div>
 
           <div
-            className="box bg-[#232540] w-fit rounded-lg py-2 mt-1 px-3 space-y-2 hidden absolute right-0"
+            className="box bg-[#232540] w-fit rounded-lg py-2 mt-1 px-3 space-y-2 hidden absolute right-0 z-50"
             ref={this.references.menu}
           >
-            <p className="rounded-lg px-1 py-1">Switch to imperial</p>
+            <p className="rounded-lg px-1 py-1">Options</p>
 
             <p className="opacity-50 ">Temperature</p>
             <ul className="border-b-2 border-[#302F4A]">

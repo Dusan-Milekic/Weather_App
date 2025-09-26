@@ -12,7 +12,7 @@ function HourCard({ ts, temp }) {
 
   return (
     <div className="bg-[#302F4A] rounded-lg flex items-center  justify-between py-3 px-4 mt-2">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 ">
         <img src={icon} alt="hour" className="h-10 w-10" />
         <p className="text-xs  font-bold">{hour}</p>
       </div>

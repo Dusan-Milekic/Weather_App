@@ -50,11 +50,11 @@ class SettingsDay extends Component {
 
         {/* menu */}
         {menu && (
-          <div className="w-full absolute top-full left-0 z-50 mt-1">
+          <div className="w-full absolute top-full left-0 mt-1 z-[100]">
             <ul
               role="listbox"
               aria-labelledby="day-selector"
-              className="flex flex-col gap-2 border-2 border-[#302F4A] rounded-lg bg-[#232540] py-2 shadow-lg"
+              className="flex flex-col gap-2 border-2 border-[#302F4A] rounded-lg bg-[#232540] py-2 shadow-lg w-28 relative z-30"
             >
               {NAMES.map((d) => {
                 const active = d === dayName;
@@ -86,7 +86,7 @@ class SettingsDay extends Component {
 }
 
 const mapState = (state) => ({
-  dayNumber: state.dayName?.value ?? 1, // konzistentno sa vašim store-om
+  dayNumber: state.dayName?.value ?? 1,
 });
 
 export default connect(mapState, { changeDay })(SettingsDay);

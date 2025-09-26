@@ -10,7 +10,7 @@ export default class SearchBar extends Component {
   render() {
     return (
       <>
-        <div className="flex flex-col gap-1 sm:flex-row sm:gap-5 sm:max-w-3xl sm:mx-auto">
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-5 sm:max-w-3xl sm:mx-auto">
           <div className="searchbar flex bg-[#262540] items-center rounded-lg px-3 py-3 flex-2">
             <div className="img">
               <img src={icon_search} alt="ico" />
